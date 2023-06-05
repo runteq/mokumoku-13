@@ -1,0 +1,62 @@
+<div class="card">
+  <div class="card-header">
+    <h3 class="mb-0">プロフィール</h3>
+    <% unless current_user == @user %>
+      <% if current_user.following?(@user) %>
+        <%= form_with(model: @relationship, url: relationship_path(@relationship), html: { method: :delete }) do |f| %>
+          <%= f.hidden_field :follow_id %>
+          <%= link_to 'フォローを外す', "#", onclick: "this.closest('form').submit();return false;", class: 'btn btn-danger btn-block' %>
+        <% end %>
+      <% else %>
+        <%= form_with(model: current_user.relationships.build(follow_id: @user.id), html: { id: "new_relationship_#{current_user.id}" }) do |f| %>
+          <%= f.hidden_field :follow_id %>
+          <%= link_to 'フォローする', "#", onclick: "this.closest('form').submit();return false;", class: 'btn btn-primary btn-block' %>
+        <% end %>
+      <% end %>
+    <% end %>
+    <div>
+      <strong>フォロー数:</strong> <%= @user.followings_count %>
+      <strong>フォロワー数:</strong> <%= @user.followers_count %>
+    </div>
+  </div>
+
+  <div class="card-body">
+    <%= form_with model: @user, url: mypage_profile_path do |f|  %>
+      <div class="d-lg-flex align-items-center justify-content-between">
+        <div class="d-flex align-items-center mb-4 mb-lg-0">
+          <%= image_tag @user.decorate.avatar, class: 'avatar-xl rounded-circle' %>
+          <div class="ms-3">
+            <h4 class="mb-3">Your avatar</h4>
+          </div>
+        </div>
+        <div>
+        </div>
+      </div>
+    <% end %>
+    <hr class="my-5">
+    <div>
+      <h4 class="mb-0">Personal Details</h4>
+      <p class="mb-4">
+        Edit your personal information and address.
+      </p>
+      <%= form_with(model: @user, url: mypage_profile_path) do |f| %>
+        <div class="mb-3">
+          <%= f.label :email, class: 'form-label' %>
+          <div><%= @user.email %></div>
+        </div>
+        <div class="mb-3">
+          <%= f.label :name, class: 'form-label' %>
+          <div><%= @user.name %></div>
+        </div>
+        <div class="mb-3">
+          <%= f.label :profile, class: 'form-label' %>
+          <div><%= @user.profile %></div>
+        </div>
+        <div class="mb-3">
+          <%= f.label :hobby, class: 'form-label' %>
+          <div><%= @user.hobby %></div>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>
