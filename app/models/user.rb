@@ -81,6 +81,10 @@ class User < ApplicationRecord
     notification_timings.liked_event.present?
   end
 
+  def mine?(current_user)
+    self == current_user
+  end
+
   def follow(other_user)
     unless self == other_user
       self.relationships.find_or_create_by(follow_id: other_user.id)

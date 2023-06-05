@@ -1,7 +1,7 @@
 <div class="card">
   <div class="card-header">
     <h3 class="mb-0">プロフィール</h3>
-    <% unless current_user == @user %>
+    <% unless @user.mine?(current_user) %>
       <% if current_user.following?(@user) %>
         <%= form_with(model: @relationship, url: relationship_path(@relationship), html: { method: :delete }) do |f| %>
           <%= f.hidden_field :follow_id %>
